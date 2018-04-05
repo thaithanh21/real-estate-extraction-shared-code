@@ -1,0 +1,2 @@
+pip install /fasttext/
+python train.py --log_dir='/output/log/' --word_tokenizer='/data/word_tokenizer.pkl' --char_tokenizer='/data/char_tokenizer.pkl' --data='/data/data' --word_vec='/data/word_vec.bin' --batch_size=64 --num_epoch=60 --version=18

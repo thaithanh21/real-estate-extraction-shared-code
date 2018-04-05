@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ree-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ree-server
+    spec:
+      # volumes:
+      #   - name: storage-credentials
+      #     secret:
+      #       secretName: storage-auth-credentials
+      #       items:
+      #         - key: credentials
+      #           path: storage-credentials.json
+      containers:
+      - name: ree-container
+        image: asia.gcr.io/real-estate-extraction-196916/tf-serving-ree:v3
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - tensorflow_model_server --port=9000 --model_name=ree --model_base_path=/export/
+        ports:
+        - containerPort: 9000
+        # securityContext:
+        #   privileged: true
+        #   capabilities:
+        #     add:
+        #       - SYS_ADMIN
+        # volumeMounts:
+        #   - name: storage-credentials
+        #     mountPath: /auth
+        #     readOnly: true
+        # env:
+        #   - name: GOOGLE_APPLICATION_CREDENTIALS
+        #     value: "/auth/storage-credentials.json"
+        # lifecycle:
+        #   postStart:
+        #     exec:
+        #       command: ["gcsfuse", "-o", "nonempty", "-o", "allow_other","ree-models", "/export"]
+        #   preStop:
+        #     exec:
+        #       command: ["fusermount", "-u", "/export"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: ree-service
+  name: ree-service
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+  selector:
+    app: ree-server
+  type: LoadBalancer

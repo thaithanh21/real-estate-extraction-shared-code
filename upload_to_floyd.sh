@@ -1,0 +1,1 @@
+floyd run --gpu --env tensorflow-1.4 --data ductrung239/datasets/fasttext/1:fasttext --data ductrung239/datasets/real-estate-extraction/:data --tensorboard --message "$1" "bash floyd.sh"

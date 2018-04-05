@@ -1,0 +1,11 @@
+output
+__pycache__
+.vscode
+data
+*.pkl
+all_text.txt
+log_dir
+*.pyc
+.floyd*
+trained_model
+*.txt
